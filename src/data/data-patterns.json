@@ -66,11 +66,10 @@
     {"phrase": "universitas klabat peringkat ke berapa di sulawesi utara", "result": {"peringkatSulawesi": 1}},
     {"phrase": "universitas klabat peringkat ke berapa di provensi sulawesi utara", "result": {"peringkatSulawesi": 1}},
     {"phrase": "universitas klabat berdiri tahun berapa", "result": {"unklab_tahun": 1}},
-    {"phrase": "siapa dekan di fakultas ilmu komputer unklab", "result": {"dekanIlmuKomputer": 1}},
+    {"phrase": "siapa dekan di fakultas ilmu komputer unklab", "result": {"dekanIlmuKomputer": 2}},
     {"phrase": "siapa dekan di fakultas ilmu komputer universitas klabat", "result": {"dekanIlmuKomputer": 1}},
     {"phrase": "siapa dekan di fakultas ilmu komputer unklab", "result": {"dekanIlmuKomputer": 1}},    
     {"phrase": "siapa dekan di unklab", "result": {"bertanyaDekan": 1}},
     {"phrase": "siapa dekan di universitas klabat sekarang", "result": {"bertanyaDekan": 1}},
-    {"phrase": "siapa dekan di unklab sekarang", "result": {"bertanyaDekan": 1}},
-    {"phrase": "anjing", "result": {"makian": 1}}
+    {"phrase": "siapa dekan di unklab sekarang", "result": {"bertanyaDekan": 1}}
 ]

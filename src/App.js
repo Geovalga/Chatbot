@@ -3,12 +3,10 @@ import { ContainerBot, Loading } from './components';
 import { build_dictionary, clean_input, get_time } from './functions';
 
 const brain = require('brain.js');
-const trainingPhrases = require('./data/data-patterns.json');
 const data_responses = require('./data/data-responses.json');
-const makian = [
-  'anjing', 'babi',
-  'bangsat', 'bajingan',
-];
+const makian = ['anjing', 'babi', 'monyet', 'kunyuk', 'bajingan', 'asu', 'bangsat', 'kampret', 'kontol', 'memek', 'ngentot', 'ngewe', 'jembut', 'perek', 'pecun', 'bencong', 'banci', 'jablay', 'maho', 'bego', 'goblok', 'idiot', 'geblek', 'orang gila', 'gila', 'sinting', 'tolol', 'sarap', 'udik', 'kampungan', 'kamseupay', 'buta', 'budek', 'bolot', 'jelek', 'setan', 'iblis', 'jahanam', 'dajjal', 'jin tomang', 'keparat', 'bejad', 'gembel', 'brengesek', 'tai', 'sompret'];
+let trainingPhrases = require('./data/data-patterns.json');
+trainingPhrases = [...trainingPhrases, ...makian.map(m => ({phrase: m, result: { makian: 1 }}))];
 
 
 
@@ -43,14 +41,12 @@ function encode(phrase) {
 
 function App() {
   const [loading, setLoading] = useState(5);
-
   const [chats, setChats] = useState([{
     typ: true,
     msg: 'Hi, selamat datang :)',
     prb: null,
     tim: get_time(new Date()),
   }]);
-
   const [input_chat, setInput_chat] = useState('');
 
 
@@ -99,7 +95,7 @@ function App() {
       // predict response chatbot
       const [respond_bot, prob_bot] = predict_bot(input_chat);
       const prob_val = (parseFloat(prob_bot)*100).toFixed(2);
-      const threshold = 100;
+      const threshold = 60;
       let makianCheck = false;
       makian.forEach(m => {
         if(m === input_chat) {
@@ -112,13 +108,6 @@ function App() {
         setChats([...chats, user, {
           typ: true,
           msg: respond_bot,
-          prb: prob_val,
-          tim: get_time(new Date()),
-        }]);
-      } else if(makianCheck) {
-        setChats([...chats, user, {
-          typ: true,
-          msg: 'Maaf, tidak menerima kata kasar.',
           prb: prob_val,
           tim: get_time(new Date()),
         }]);
@@ -169,6 +158,7 @@ function App() {
   // for loading
   useEffect(() => {
     model_network.train(trainingSet);
+
     setTimeout(() => (loading > 0) && setLoading(loading => loading - 1), 500);
   }, [loading]);
 
