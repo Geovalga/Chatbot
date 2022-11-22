@@ -1,6 +1,21 @@
 import { logoBot } from './icons';
 
+const trainingPhrases = require('./data/data-patterns.json');
+const data_responses = require('./data/data-responses.json');
+
 export default function App() {
+  // <------------------------- functions.js
+
+  // -------------------------> functions.js
+
+
+
+  // <------------------------- index.js
+
+  // -------------------------> index.js
+
+
+
   return (
     <div className="App">
       <div className="card d-flex flex-column vh-100 overflow-hidden">
