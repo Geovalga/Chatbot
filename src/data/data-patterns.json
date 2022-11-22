@@ -71,5 +71,6 @@
     {"phrase": "siapa dekan di fakultas ilmu komputer unklab", "result": {"dekanIlmuKomputer": 1}},    
     {"phrase": "siapa dekan di unklab", "result": {"bertanyaDekan": 1}},
     {"phrase": "siapa dekan di universitas klabat sekarang", "result": {"bertanyaDekan": 1}},
-    {"phrase": "siapa dekan di unklab sekarang", "result": {"bertanyaDekan": 1}}
+    {"phrase": "siapa dekan di unklab sekarang", "result": {"bertanyaDekan": 1}},
+    {"phrase": "anjing", "result": {"makian": 1}}
 ]

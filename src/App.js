@@ -5,6 +5,10 @@ import { build_dictionary, clean_input, get_time } from './functions';
 const brain = require('brain.js');
 const trainingPhrases = require('./data/data-patterns.json');
 const data_responses = require('./data/data-responses.json');
+const makian = [
+  'anjing', 'babi',
+  'bangsat', 'bajingan',
+];
 
 
 
@@ -60,7 +64,7 @@ function App() {
     // predict the response
     const json_output = model_network.run(encoded);
     console.log(`Max Categories: ${Object.values(json_output).length} intents.`);
-    console.log(json_output);
+    console.log(`json_output`, json_output);
 
     // get max value using apply
     const max = Math.max.apply(null, Object.values(json_output));
@@ -95,12 +99,26 @@ function App() {
       // predict response chatbot
       const [respond_bot, prob_bot] = predict_bot(input_chat);
       const prob_val = (parseFloat(prob_bot)*100).toFixed(2);
-      const threshold = 75;
+      const threshold = 100;
+      let makianCheck = false;
+      makian.forEach(m => {
+        if(m === input_chat) {
+          makianCheck = true;
+        }
+      });
+      console.log(`makianCheck`, makianCheck);
 
       if(prob_val > threshold) {
         setChats([...chats, user, {
           typ: true,
           msg: respond_bot,
+          prb: prob_val,
+          tim: get_time(new Date()),
+        }]);
+      } else if(makianCheck) {
+        setChats([...chats, user, {
+          typ: true,
+          msg: 'Maaf, tidak menerima kata kasar.',
           prb: prob_val,
           tim: get_time(new Date()),
         }]);
@@ -150,8 +168,8 @@ function App() {
 
   // for loading
   useEffect(() => {
+    model_network.train(trainingSet);
     setTimeout(() => (loading > 0) && setLoading(loading => loading - 1), 500);
-    (loading === 0) && model_network.train(trainingSet);
   }, [loading]);
 
   // for updating chats
@@ -161,7 +179,7 @@ function App() {
 
   return (
     <div className='App'>
-      { loading ? <Loading val={((5-loading) / 5)*100} /> : <div className='card d-flex flex-column vh-100 overflow-hidden'>
+      { loading > 0 ? <Loading val={((5-loading) / 5)*100} /> : <div className='card d-flex flex-column vh-100 overflow-hidden'>
         <div className="card-header bg-info text-center"><b>Informasi Dormitory Chatbot</b></div>
 				<div className='card-body' style={{overflowY:'scroll'}} id='content-chat-feed'>
           { chats.map((obj, index) => ContainerBot({...obj, index})) }
