@@ -1,8 +1,9 @@
+import { useState, useEffect } from 'react';
 import logobot from './bot.png';
 import logouser from './user.png';
 import './App.css';
 import {build_dictionary, clean_input, response_user, response_bot, get_time} from './functions.js';
-import $ from 'jquery';
+import $, { get } from 'jquery';
 import Header from './components/Header.jsx';
 
 // get data
@@ -61,12 +62,14 @@ function App() {
 	}
 
 	// compile/execute chatbot
+  const [input_chat, setInput_chat] = useState('');
 	function run_chatbot(){
-		var input_chat = $('#input-chat').val(); // get input chat
+		// var input_chat = $('#input-chat').val(); // get input chat
 		if(input_chat.length === 0){
 			alert("Sorry, write your text chat first.");
 		}else{
-			$("#content-chat-feed").append(response_user(input_chat, get_time(new Date)));
+      console.log('response_user', input_chat);
+			// $("#content-chat-feed").append(response_user(input_chat, get_time(new Date)));
 			force_scroll_bottom();
 			
 			// predict response chatbot
@@ -77,14 +80,37 @@ function App() {
 			
 			const threshold = 75;
 			if(prob_val > threshold){
-				$("#content-chat-feed").append(response_bot(respond_bot, prob_val, get_time(new Date)));
+        setChats([...chats, {
+          typ: false,
+          msg: input_chat,
+          prb: null,
+          tim: get_time(new Date),
+        }, {
+          typ: true,
+          msg: respond_bot,
+          prb: prob_val,
+          tim: get_time(new Date),
+        }]);
+				// $("#content-chat-feed").append(response_bot(respond_bot, prob_val, get_time(new Date)));
 			}else{
-				$("#content-chat-feed").append(response_bot("Maaf, saya masih bodoh. Saya belum mengerti.", prob_val, get_time(new Date)));
+        setChats([...chats, {
+          typ: false,
+          msg: input_chat,
+          prb: null,
+          tim: get_time(new Date),
+        }, {
+          typ: true,
+          msg: 'Maaf, saya masih bodoh. Saya belum mengerti.',
+          prb: prob_val,
+          tim: get_time(new Date),
+        }]);
+				// $("#content-chat-feed").append(response_bot("Maaf, saya masih bodoh. Saya belum mengerti.", prob_val, get_time(new Date)));
 			}
 			// scroll bottom
 			force_scroll_bottom();
 			// set empty input
-			$('#input-chat').val('');
+			// $('#input-chat').val('');
+      setInput_chat('');
 		}
 	}
 
@@ -105,27 +131,45 @@ function App() {
 	// pressing Enter key
 	const _handleKeyDown = (e) => {
 		if (e.key === 'Enter') {
-		    // compile chatbot brain.js
-		    run_chatbot();
+      // compile chatbot brain.js
+      run_chatbot();
 		}
 	}
-	  
-    return (
+
+  const [chats, setChats] = useState([{
+    typ: true,
+    msg: 'Hi, selamat datang :)',
+    prb: '98.99%',
+    tim: '11:00 PM',
+  }]);
+
+  useEffect(() => {
+    console.log(`chats`, chats);
+  }, [chats]);
+
+  const containerbot = ({ typ, msg, prb, tim }) => {
+    console.log(`typ = ${typ} | msg = ${msg} | prb = ${prb} | tim = ${tim}`);
+    return(
+      <div className={typ ? 'containerbot' : 'containerbot darker'}>
+        <img src={typ ? logobot : logouser} alt="Avatar" style={{width:"100%"}} className={typ ? '' : 'right'} />
+        <div className="row">
+          <div className={typ ? 'col-sm-8 pt-4' : 'col-sm-2'}>{typ ? msg : <span className='time-left'>{tim}</span>}</div>
+          <div className={typ ? 'col-sm-4 pt-4' : 'col-sm-10 text-end'}>{typ ? <span className='time-right'>{prb}<br />{tim}</span> : msg}</div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
 		<div className="App">
 			<div className="card d-flex flex-column vh-100 overflow-hidden">
 				<Header />
 				<div className="card-body" style={{overflowY:"scroll"}} id="content-chat-feed">
-					<div className="containerbot">
-						<img src={logobot} alt="Avatar" style={{width:"100%"}}/>
-						<div className="row">
-							<div className="col-sm-8 pt-4">Hi, selamat datang :)</div>
-							<div className="col-sm-4 pt-2"><span className="time-right">98.99%<br />11:00 PM</span></div>
-						</div>
-					</div>
+          { chats.map(obj => containerbot(obj)) }
 				</div> 
 				<div className="card-footer"> 
 					<div className="input-group">
-						<input type="text" className="form-control" id="input-chat" onKeyDown={_handleKeyDown}/>
+						<input type="text" className="form-control" id="input-chat" onKeyDown={_handleKeyDown} value={input_chat} onChange={e => setInput_chat(e.target.value)} />
 						<div className="input-group-append">
 							<button className="btn btn-primary" type="button" onClick={handleButtonSend}>Send</button>
 						</div>
@@ -133,7 +177,7 @@ function App() {
 				</div>
 			</div>
 		</div>
-    );
+  );
 }
 
 export default App;
