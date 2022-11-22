@@ -1,5 +1,7 @@
-import containerbot from './containerbot';
+import ContainerBot from './ContainerBot';
+import Loading from './Loading';
 
 export {
-  containerbot,
+  ContainerBot,
+  Loading,
 };

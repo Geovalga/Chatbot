@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { containerbot } from './components';
+import { ContainerBot, Loading } from './components';
 import { build_dictionary, clean_input, get_time } from './functions';
 
 const brain = require('brain.js');
@@ -20,7 +20,7 @@ const trainingSet = trainingPhrases.map(dataSet => {
 
 // train neural network
 const model_network = new brain.NeuralNetwork();
-model_network.train(trainingSet);
+// model_network.train(trainingSet);
 // -------------------------> index.js
 
 
@@ -38,6 +38,19 @@ function encode(phrase) {
 
 
 function App() {
+  const [loading, setLoading] = useState(5);
+
+  const [chats, setChats] = useState([{
+    typ: true,
+    msg: 'Hi, selamat datang :)',
+    prb: null,
+    tim: get_time(new Date()),
+  }]);
+
+  const [input_chat, setInput_chat] = useState('');
+
+
+
   // <------------------------- index.js
   // make a prediction
   function predict_bot(txt_chat_input) {
@@ -66,14 +79,6 @@ function App() {
 
 		return [pred_response, pred_prob];
   }
-
-  const [chats, setChats] = useState([{
-    typ: true,
-    msg: 'Hi, selamat datang :)',
-    prb: null,
-    tim: get_time(new Date()),
-  }]);
-  const [input_chat, setInput_chat] = useState('');
 
   // compile/execute chatbot
   function run_chatbot() {
@@ -143,16 +148,23 @@ function App() {
 
 
 
+  // for loading
+  useEffect(() => {
+    setTimeout(() => (loading > 0) && setLoading(loading => loading - 1), 500);
+    (loading === 0) && model_network.train(trainingSet);
+  }, [loading]);
+
+  // for updating chats
   useEffect(() => {
     console.log(`chats`, chats);
   }, [chats]);
 
   return (
     <div className='App'>
-      <div className='card d-flex flex-column vh-100 overflow-hidden'>
+      { loading ? <Loading val={((5-loading) / 5)*100} /> : <div className='card d-flex flex-column vh-100 overflow-hidden'>
         <div className="card-header bg-info text-center"><b>Informasi Dormitory Chatbot</b></div>
 				<div className='card-body' style={{overflowY:'scroll'}} id='content-chat-feed'>
-          { chats.map((obj, index) => containerbot({...obj, index})) }
+          { chats.map((obj, index) => ContainerBot({...obj, index})) }
 				</div> 
 				<div className='card-footer'> 
 					<div className='input-group'>
@@ -162,7 +174,7 @@ function App() {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> }
     </div>
   );
 }
