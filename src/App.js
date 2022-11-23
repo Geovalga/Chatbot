@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ContainerBot, Loading } from './components';
 import { build_dictionary, clean_input, get_time } from './functions';
+import data_responses from './data/data-responses';
+import trainingPhrases from './data/data-pattern';
 
 const brain = require('brain.js');
-const data_responses = require('./data/data-responses.json');
-const makian = ['anjing', 'babi', 'monyet', 'kunyuk', 'bajingan', 'asu', 'bangsat', 'kampret', 'kontol', 'memek', 'ngentot', 'ngewe', 'jembut', 'perek', 'pecun', 'bencong', 'banci', 'jablay', 'maho', 'bego', 'goblok', 'idiot', 'geblek', 'orang gila', 'gila', 'sinting', 'tolol', 'sarap', 'udik', 'kampungan', 'kamseupay', 'buta', 'budek', 'bolot', 'jelek', 'setan', 'iblis', 'jahanam', 'dajjal', 'jin tomang', 'keparat', 'bejad', 'gembel', 'brengesek', 'tai', 'sompret'];
-let trainingPhrases = require('./data/data-patterns.json');
-trainingPhrases = [...trainingPhrases, ...makian.map(m => ({phrase: m, result: { makian: 1 }}))];
+// const data_responses = require('./data/data-responses-old.json');
+// const trainingPhrases = require('./data/data-patterns-old.json');
+
+console.log(`data_responses`, data_responses);
+console.log(`trainingPhrases`, trainingPhrases);
+
 
 
 
@@ -96,13 +100,6 @@ function App() {
       const [respond_bot, prob_bot] = predict_bot(input_chat);
       const prob_val = (parseFloat(prob_bot)*100).toFixed(2);
       const threshold = 60;
-      let makianCheck = false;
-      makian.forEach(m => {
-        if(m === input_chat) {
-          makianCheck = true;
-        }
-      });
-      console.log(`makianCheck`, makianCheck);
 
       if(prob_val > threshold) {
         setChats([...chats, user, {
@@ -114,7 +111,7 @@ function App() {
       } else {
         setChats([...chats, user, {
           typ: true,
-          msg: 'Maaf, saya masih bodoh. Saya belum mengerti.',
+          msg: 'Maaf, pertanyaan anda tidak dapat dimengerti.',
           prb: prob_val,
           tim: get_time(new Date()),
         }]);
