@@ -31,7 +31,9 @@ const data = [
   { barangKualitas: "Toko ini adalah toko berkualitas dengan barang-barang yang original." },
   
   { tinjauanPelanggan: "Lebih dari rata-rata pelanggan yang datang ke toko ini, suka pada toko kami." },
-  { rataPelanggan: "Rata-rata ada sekitar 10 pelanggan yang sering datang di toko ini." }
+  { rataPelanggan: "Rata-rata ada sekitar 10 pelanggan yang sering datang di toko ini." },
+  
+  { waktu: `Waktu hari ini adalah ${new Date()}.` }
 ];
 
 export default data;

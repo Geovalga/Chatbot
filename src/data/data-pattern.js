@@ -31,6 +31,8 @@ const barangKualitas = ['apakah barang-barang di toko ini berkualitas', 'apakah 
 const tinjauanPelanggan = ['apa respons pelanggan lain pada toko ini', 'respons pelanggan lain', 'respons pelanggan'];
 const rataPelanggan = ['ada berapa jumlah pelanggan di toko ini', 'berapa pelanggan di toko ini', 'jumlah pelanggan'];
 
+const waktu = ['ini hari apa', 'sekarang hari apa', 'hari sekarang', 'hari', 'ini bulan apa', 'sekaranb ulan apa', 'bulan sekarang', 'bulan', 'ini tahun berapa', 'sekarang tahun berapa', 'tahun sekarang', 'tahun', 'sekarang jam berapa', 'jam sekarang', 'jam', 'sekarang menit keberapa', 'menit sekarang', 'menit', 'sekarang detik keberapa', 'detik sekarang', 'detik'];
+
 
 
 const data = [
@@ -66,6 +68,8 @@ const data = [
 
   ...tinjauanPelanggan.map(w => ({ phrase: w, result: { tinjauanPelanggan: 1 }})),
   ...rataPelanggan.map(w => ({ phrase: w, result: { rataPelanggan: 1 }})),
+
+  ...waktu.map(w => ({ phrase: w, result: { waktu: 1 }})),
 ];
 
 export default data;

@@ -167,7 +167,7 @@ function App() {
   return (
     <div className='App'>
       { loading > 0 ? <Loading val={((5-loading) / 5)*100} /> : <div className='card d-flex flex-column vh-100 overflow-hidden'>
-        <div className="card-header bg-info text-center"><b>Informasi Dormitory Chatbot</b></div>
+        <div className="card-header text-white bg-success text-center"><b>Informasi Dormitory Chatbot</b></div>
 				<div className='card-body' style={{overflowY:'scroll'}} id='content-chat-feed'>
           { chats.map((obj, index) => ContainerBot({...obj, index})) }
 				</div> 
@@ -175,7 +175,7 @@ function App() {
 					<div className='input-group'>
 						<input type='text' className='form-control' id='input-chat' value={input_chat} onChange={e => setInput_chat(e.target.value)} onKeyDown={handleKeyDown} />
 						<div className='input-group-append'>
-							<button className='btn btn-primary' type='button' onClick={handleButtonSend}>Send</button>
+							<button className='btn btn-success' type='button' onClick={handleButtonSend}>Send</button>
 						</div>
 					</div>
 				</div>
